@@ -1,4 +1,5 @@
 from telegram import Update
+import os
 from telegram.ext import (
     ApplicationBuilder,
     MessageHandler,
@@ -13,11 +14,11 @@ from order_manager import get_order, reset_order
 
 # ================= CONFIG =================
 
-BOT_TOKEN = "8521781730:AAEPskxetDPHLVazZ127zMDdcBhFs13SVh8"   # ⚠️ regenerate token from BotFather
+BOT_TOKEN = os.environ.get("BOT_TOKEN")   
 OWNER_CHAT_ID = 5618584289
 
 UPI_ID = "habib@ybl"
-MERCHANT_NAME = "Habib Biryani"
+MERCHANT_NAME = "Habib Biryani "
 
 # ================= UPI LINK =================
 
