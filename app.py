@@ -1,4 +1,6 @@
 import os
+from flask import Flask
+import threading
 from telegram import Update
 from telegram.ext import (
     ApplicationBuilder,
@@ -19,6 +21,18 @@ OWNER_CHAT_ID = 5618584289
 
 UPI_ID = "habib@ybl"
 MERCHANT_NAME = "Habib Biryani "
+
+# ================= WEB SERVER (FOR RENDER UPTIME) =================
+
+flask_app = Flask(__name__)
+
+@flask_app.route("/")
+def home():
+    return "Biryani Bot is running 🍗"
+
+@flask_app.route("/health")
+def health():
+    return {"status": "alive"}
 
 # ================= UPI LINK =================
 
@@ -216,10 +230,17 @@ Amount: ₹{order['total']}
             pass
 
 # ================= RUN BOT =================
+def run_web():
+    flask_app.run(host="0.0.0.0", port=10000)
 
 if __name__ == "__main__":
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
     print("🤖 Biryani AI Bot started...")
+
+    # Start Flask server in background
+    threading.Thread(target=run_web).start()
+
+    # Start Telegram bot
     app.run_polling()
